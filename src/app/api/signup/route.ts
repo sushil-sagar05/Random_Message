@@ -46,6 +46,7 @@ export async function POST(request:Request){
             isVerfied:false
       })
       await newUser.save()
+    }
       // send verification email
       const emailResponse = await sendVerficationEmail(
         email,
@@ -63,7 +64,7 @@ export async function POST(request:Request){
         message:'User Registered Successfully. Please Verify your email'
     },{status:200})
       }
-     } catch (error) {
+      catch (error) {
         console.error('Error registering user',error)
         return Response.json({
             success:false,
