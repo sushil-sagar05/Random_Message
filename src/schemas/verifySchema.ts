@@ -2,5 +2,5 @@ import {z} from 'zod'
 
 
 export const verifySchema = z.object({
-    const :z.string().length(6,"Verification code must be 6 characters")
+    code :z.string().length(6,"Verification code must be 6 characters")
 })

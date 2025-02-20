@@ -1,14 +1,15 @@
 import mongoose,{Schema,Document} from "mongoose";
 
 export interface Message extends Document{
+    _id:mongoose.Types.ObjectId
     content:string;
-    createdAt:Date
+    createdAt:Date;
 }
 
-const MessageSchema:Schema<Message> = new Schema({
+const MessageSchema:Schema<Message> = new mongoose.Schema({
     content:{
         type:String,
-        required:true
+        required:true,
     },
     createdAt:{
         type:Date,
@@ -22,11 +23,11 @@ export interface User extends Document{
     password:string;
     verifyCode:string;
     verifyCodeExpiry:Date;
-    isAcceptingMessage:boolean;
+    isAcceptingMessages:boolean;
     messages:Message[];
-    isVerfied:Boolean
+    isVerfied:boolean
 }
-const UserSchema:Schema<User>=new Schema({
+const UserSchema:Schema<User>=new mongoose.Schema({
     username:{
         type:String,
         required:[true,"Username is required"],
@@ -55,7 +56,7 @@ const UserSchema:Schema<User>=new Schema({
         type:Boolean,
         default:false
     },
-    isAcceptingMessage:{
+    isAcceptingMessages:{
         type:Boolean,
         default:true,
     },
