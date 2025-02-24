@@ -9,6 +9,7 @@ export async function POST(request:Request){
     await dbConnect()
     const session = await getServerSession(authOptions)
    const user =  session?.user
+//    console.log(user)
    if(!session ||!session.user){
     return Response.json(
         {
@@ -22,7 +23,7 @@ export async function POST(request:Request){
    const userId = user?._id;
    const {acceptMessages } = await request.json()
    try {
-   const updatedUser =  await UserModel.findByIdAndUpdate(userId,{isAcceptingMessage:acceptMessages},{
+   const updatedUser =  await UserModel.findByIdAndUpdate(userId,{isAcceptingMessages:acceptMessages},{
         new:true
     })
     if(!updatedUser){
@@ -42,7 +43,7 @@ export async function POST(request:Request){
                 message:"Message acceptance status updated successfully",
                 updatedUser
             },{
-                status:401
+                status:200
             }
         )
      }

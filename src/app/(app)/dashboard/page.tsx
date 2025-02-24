@@ -24,7 +24,7 @@ function page() {
   const handleDeleteMessage = (messageId:string)=>{
     setMessages(messages.filter((message)=>message._id.toString()!==messageId))
   }
-  const { data: session } = useSession();
+  const { data: session,update } = useSession();
 
   const form = useForm({
     resolver:zodResolver(isAcceptingMessage)
@@ -38,6 +38,7 @@ function page() {
     try {
       const response = await axios.get<ApiResponse>('/api/accept-messages');
       setValue('acceptMessages',response.data.isAcceptingMessages??false);
+      // console.log('acceptMessages',response.data.isAcceptingMessages??false)
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>
       toast({
@@ -55,7 +56,8 @@ setIsloading(true)
 setIsswitchLoading(false)
 try {
  const response= await axios.get('/api/get-messages')
- setMessages(response.data.messages || [])
+//  console.log(response.data.messages )
+setMessages(response.data.messages || []); 
  if(refresh){
   toast({
     title:"Refresh Messages",
@@ -92,7 +94,9 @@ const handleSwitchChange= async()=>{
   const response =  await axios.post<ApiResponse>('api/accept-messages',{
       acceptMessages:!acceptMessages
     })
+    await update()
     setValue('acceptMessages',!acceptMessages)
+   
     toast({
       title:response.data.message,
       variant:"default"
