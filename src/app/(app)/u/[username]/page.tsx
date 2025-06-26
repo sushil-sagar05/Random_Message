@@ -11,7 +11,13 @@ import React, { useEffect } from 'react'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { messageSchema } from '@/schemas/messageSchema'
+import { useCompletion } from '@ai-sdk/react'
+import data from '@/data.json'
 function messagePage() {
+  const { completion, input, handleInputChange, handleSubmit } = useCompletion({
+    api: '/api/suggest-messages',
+  });
+
   // const router = useRouter()
   const params = useParams<{username:string}>()
   const {toast} = useToast()
@@ -23,15 +29,6 @@ function messagePage() {
     }
   })
  
-
-
-
-
-
-
-
-
-
 
 
   const onSubmit = async(data:z.infer<typeof messageSchema>)=>{
@@ -64,12 +61,10 @@ function messagePage() {
   }
   return (
     <div className='flex justify-center items-center text-center min-h-screen bg-white m-2'>
-      <div className=' text-center min-h-screen bg-white'>
+      <div className=' text-center min-h-screen w-[65vw] bg-white'>
      <div className='text-center'>
       <h1 className='text-4xl font-bold tracking-tight lg:text-4xl mb-6'>Public Profile Link</h1>
      </div>
-       
-                
                 <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}  className="space-y-4 
                text-left">
@@ -92,9 +87,36 @@ function messagePage() {
                 type="submit">Send it</Button>
               </form>
             </Form>
-                
-     
+        <div className='mt-8 flex items-start'>
+          <div className='text-left'>
+          <Button>
+      Suggest Messages
+     </Button>
+     <p className='text-xs sm:text-sm mt-2'>click on any message below to select it</p>
+          </div>
+       
+        </div>
+        <form 
+        className='border-2 space-y-2 shadow-md rounded-lg w-full p-5'
+        
+        onSubmit={handleSubmit}>
+          <h2 className='font-bold text-left '>Messages</h2>
+      {
+        data.map((data,idx)=>(
+          <Input
+          
+          name="prompt"
+          value={input}
+          onChange={handleInputChange}
+          id="input"
+        />
+        ))
+      }
+      <Button type="submit">Submit</Button>
+      <div>{completion}</div>
+    </form>
     </div>
+   
     </div>
   )
 }

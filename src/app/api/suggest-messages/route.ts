@@ -19,22 +19,22 @@ export async function POST(req: Request) {
             async start(controller) {
                 try {
                     for await (const text of textStream) {
-                        // Push each chunk of data to the stream
+                        
                         controller.enqueue(text);
                     }
-                    // Close the stream once all data is processed
+                    
                     controller.close();
                 } catch (error) {
-                    // In case of error, signal that the stream is done
+                   
                     controller.error(error);
                 }
             }
         });
 
-        // Return the stream to the client in the response
+        
         return new NextResponse(readableStream, {
             headers: {
-                'Content-Type': 'text/Stream', // Or any other appropriate content type
+                'Content-Type': 'text/Stream', 
             },
         });
         
